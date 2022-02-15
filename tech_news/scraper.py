@@ -3,6 +3,7 @@ import requests
 import time
 import parsel
 from bs4 import BeautifulSoup
+from tech_news.database import create_news
 
 
 def fetch(url):
@@ -23,7 +24,7 @@ def scrape_novidades(html_content):
     """Seu código deve vir aqui"""
     selector = parsel.Selector(html_content)
     links_news = selector.css(
-        "div.tec--list__item a.tec--card__title__link::attr(href)"
+        "div.tec--list__item a.tec--card__thumb__link::attr(href)"
     ).getall()
 
     return links_news
@@ -150,3 +151,17 @@ def scrape_noticia(html_content):
 # Requisito 5
 def get_tech_news(amount):
     """Seu código deve vir aqui"""
+    news = []
+    url = "https://www.tecmundo.com.br/novidades"
+
+    while len(news) < amount:
+        page = fetch(url)
+        links_pages = scrape_novidades(page)
+        for link in links_pages:
+            if len(news) < amount:
+                news_content = fetch(link)
+                news.append(scrape_noticia(news_content))
+        url = scrape_next_page_link(page)
+
+    create_news(news)
+    return news
