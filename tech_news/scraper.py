@@ -102,6 +102,7 @@ def get_comments_count(html_content):
 
 def get_summary(html_content):
     selector = parsel.Selector(html_content)
+    # https://pt.stackoverflow.com/questions/192176/como-remover-tags-em-um-texto-em-python
     summary = BeautifulSoup(
         selector.css("div.tec--article__body > p").getall()[0], "html.parser"
     ).get_text()
