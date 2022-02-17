@@ -12,6 +12,7 @@ def search_by_title(title):
 
 
 # Requisito 7
+# test
 def search_by_date(date):
     """Seu código deve vir aqui"""
     try:
